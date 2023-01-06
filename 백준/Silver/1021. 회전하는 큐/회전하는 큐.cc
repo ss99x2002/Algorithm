@@ -10,7 +10,6 @@ int main()
 	int idx = -1;
 	cin >> N >> M;
 	deque<int>deq;
-	vector<int> vec;
 	queue<int> q;
 
 	for (int i = 1; i <=N; i++)
