@@ -54,12 +54,14 @@ int main()
 	for (int i = 0; i < N; i++)
 	{
 		for (int j = 0; j < M; j++) {
+			if (maxV < vis[i][j]) {
+				maxV = vis[i][j];
+			}
 			if (vis[i][j]==-1)
 			{
 				cout << -1;
 				return 0;
 			}
-			maxV = max(maxV, vis[i][j]);
 		}
 	}
 	cout << maxV;
