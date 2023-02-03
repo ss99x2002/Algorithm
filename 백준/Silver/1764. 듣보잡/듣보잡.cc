@@ -1,28 +1,28 @@
 #include <iostream>
-#include <vector>
-#include <string>
 #include <algorithm>
+#include <vector>
 #include <map>
 using namespace std;
-
-int main() {
-    ios::sync_with_stdio(false);
+int main(void) {
+    ios::sync_with_stdio(0);
     cin.tie(0);
-    cout.tie(0);
-    map<string, int> ma;
-    vector<string> vt;
-    int n, m;
-    cin >> n >> m;
-    for (int i = 0; i < n+m; i++) {
-        string str;
-        cin >> str;
-        ma[str]++;
-        if (ma[str] > 1)
-            vt.push_back(str);
+    int N, M;
+    string nl;
+    map <string, int> ans;
+    vector<string> vec;
+    cin >> N >> M;
+    for (int i = 0; i < N+M; i++) {
+        cin >> nl;
+        ans[nl]++;
+        if (ans[nl] > 1) {
+            vec.push_back(nl);
+        }
     }
-    sort(vt.begin(), vt.end());
-    cout << vt.size() << '\n';
-    for (auto o : vt)
-        cout << o << '\n';
+    sort(vec.begin(), vec.end());
+    
+    cout << vec.size() << "\n";
+    for (int i = 0; i < vec.size(); i++) {
+        cout << vec[i] << "\n";
+    }
 
 }
