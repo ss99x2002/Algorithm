@@ -10,7 +10,7 @@ class Solution {
         numbers.forEach{
             numberString.add(it.toString())
         }
-        var answer  = numberString.sortedWith(SortByNum)
+        var answer  = numberString.sortedWith(Comparator { o1, o2 -> "$o2$o1".compareTo("$o1$o2") })
         if (answer[0] == "0") {
             return "0"
         }
