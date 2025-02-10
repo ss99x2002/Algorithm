@@ -1,56 +1,47 @@
-#include <string>
-#include <vector>
-#include <queue>
 #include <iostream>
+#include <vector>
 #include <algorithm>
 
-int arr1[500001] = {};
-int arr2[500001] = {};
 using namespace std;
 
 
-void binarySearch(int n, int k) {
-	int low = 0;
-	int high = n - 1; 
+int N;
+int nArr[500001];
 
-	while (low <= high) {
-		int mid = (low + high) / 2;
-		if (arr1[mid] == k) {
-			cout << 1 << " ";
-			return;
-		}
-		else {
-			if (arr1[mid] > k) {
-				high = mid - 1;
-			}
-			else {
-				low = mid + 1;
-			}
-		}
-	}
-	cout << 0 << " ";
+int M;
+int mArr[500001];
+
+int binarySearch(int target) {
+    int st = 0;
+    int en = N - 1;
+    while (st <= en) {
+        int mid = (st + en) / 2;
+        if (nArr[mid] < target) {
+            st = mid+1;
+        } else if (nArr[mid] > target) {
+            en = mid-1;
+        } else {
+            return 1;
+        }
+    }
+    return 0;
 }
 
+
 int main() {
-	long long n;
-	long long input;
-	long long m;
-	cin >> n;
-	for (int i = 0; i < n; i++) {
-		cin >> input;
-		arr1[i] = input;
-	}
+    cin >> N;
+    for (int i=0; i<N; i++) {
+        cin >> nArr[i];
+    }
+    cin >> M;
+    for (int i=0; i<M; i++) {
+        cin >> mArr[i];
+    }
 
-	cin >> m;
-	for (int i = 0; i < m; i++) {
-		cin >> input;
-		arr2[i] = input;
-	}
+    sort(nArr, nArr+N);
 
-	sort(arr1, arr1+n);
-
-
-	for (int i = 0; i < m; i++) {
-		binarySearch(n, arr2[i]);
-	}
+    for (int i=0; i<M; i++){
+        cout << binarySearch(mArr[i]) << " ";
+    }
+    return 0;
 }
