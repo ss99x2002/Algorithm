@@ -1,2 +1,2 @@
 # Algorithm
-using C++/Kotlin
+using C++
