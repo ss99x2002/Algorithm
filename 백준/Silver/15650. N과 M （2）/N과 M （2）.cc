@@ -1,31 +1,29 @@
 #include <iostream>
-#include <vector>
+#include <algorithm>
+
 using namespace std;
 
-int arr[10001];
-bool visited[10];
-int N, M;
+int n,m;
+int num[10];
+int visited[10];
 
-void dfs(int num, int d) {
-    if (d == M) {
-        for (int i = 0; i < M; i++) {
-            cout << arr[i] << " ";
+void checkBackTracking(int idx, int cnt){
+    if (cnt == m) {
+        for (int i=0; i<m; i++){
+            cout << num[i] << " ";
         }
         cout << "\n";
         return;
     }
-    for (int i = num; i <=N; i++) {
-        if (visited[i]) continue;
-        visited[i] = 1;
-        arr[d] = i;
-        dfs(i+1,d + 1); 
-        visited[i] = 0;
+
+    for (int i=idx; i<=n; i++){
+        num[cnt] = i;
+        checkBackTracking(i+1, cnt+1);
     }
-    return;
 }
+
+
 int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cin >> N >> M;
-    dfs(1,0);
+    cin >> n >> m;
+    checkBackTracking(1,0);
 }
