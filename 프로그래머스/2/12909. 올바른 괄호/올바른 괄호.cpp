@@ -20,7 +20,7 @@ bool solution(string s)
              st.pop();  
             }
             else {
-                st.push(s[i]);
+                return false;
             }
         }
     }
