@@ -1,55 +1,59 @@
 #include <string>
 #include <vector>
-#include <queue>
 
 using namespace std;
-int answer;
-queue<pair<string,int>> q;
-bool visited[51];
 
+//begin에서 target으로 바꿀 때, 몇단계 과정을 거쳐서 변환할 수 있는지.
+//한 번의 한 개의 알파벳만 바꿀 수 있다. 
 
-bool compareWords(string w1, string w2) {
-    int cnt = 0;
-    for (int i = 0; i < w1.length(); i++) {
-        if (w1[i] == w2[i]) {
-            cnt++;
-        }
+vector<string> copyW;
+string copyT;
+int minAnswer = 52;
+bool visited[52] = {false};
+
+void dfs(int idx, int cnt){
+    if (copyW[idx] == copyT){
+        minAnswer= min(minAnswer,cnt);
+        return;
     }
-
-    if (cnt == w1.length() - 1) return true;
-    else return false;
+    
+    for (int i=0; i<copyW.size(); i++){
+        if (!visited[i]){
+            int cntW = 0;
+            for (int j=0; j<copyW[idx].size(); j++){
+                if (copyW[i][j] != copyW[idx][j]){
+                    cntW ++;
+                }
+            }
+            if (cntW == 1){
+                visited[i] = true;
+                dfs(i,cnt+1);
+                visited[i] = false;
+            }
+        }
+    }   
 }
 
 int solution(string begin, string target, vector<string> words) {
-
-    int flag = 0;
-    string start = begin;
-    string end = target;
-
-    for (auto w : words) {
-        if (w == end) {
-            flag = 1;
+    int answer = 0;
+    copyT = target;
+    copyW = words;
+    
+    
+    for (int i=0; i<words.size(); i++){
+        int diff = 0;
+        for (int j=0; j<begin.size(); j++){
+            if (begin[j] != words[i][j]) diff ++;
+        }
+        if (diff == 1) 
+        {
+            visited[i] = true;
+            dfs(i,1);
+            visited[i] = false;
         }
     }
-
-    if (flag == 0) {
-        return 0;
-    }
-
-    q.push({start,0});
-
-    while (!q.empty()) {
-        string cur = q.front().first;
-        int cnt = q.front().second;
-        q.pop();
-        if (cur == end) {
-            answer = cnt;
-        }
-        for (int i = 0; i < words.size(); i++) {
-            if (compareWords(cur, words[i]) == false || visited[i] == true) continue;
-             q.push({words[i],cnt+1});
-             visited[i] = true;     
-        }
-    }
-    return answer;
+    
+    if (minAnswer == 52) return 0;
+    
+    return minAnswer;
 }
