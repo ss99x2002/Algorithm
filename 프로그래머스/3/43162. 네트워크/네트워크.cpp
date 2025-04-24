@@ -1,44 +1,47 @@
 #include <string>
 #include <vector>
-#include <stack>
 
 using namespace std;
 
-// a와 b가 직접적으로 연결, b와 c연결 -> a,c 연결 가능 -> a,b,c같은 네트워크상
-// 컴터갯수 n, 연결 2차원 배열 computers
-// 출력 : 네트워크의 수 return 
+// 컴퓨터 A와 컴퓨터 B 직접적 연결
+// 컴퓨터 B와 컴퓨터 C 직접적 연결
+// A-C도 정보교환 가능.
+// A-B-C 같은 네트워크상에 있음.
 
-// dfs 이용. 
-// 컴퓨터 i번과 j번 연결되어 있으면 computers[i][j] = 1로 표기
-// 항상 computer[i][i] = 1 
+// 네트워크 갯수는?
+// computers[i][j] = 1이면 i,j연결. 
 
-// dfs -> 스택, 재귀
-// bfs -> 큐 이용
+// dfs 구현. 
 
+vector<int>graph[201];
+bool visited[201] = {false};
 int cnt = 0;
-int visited[201];
+
+void dfs(int node){
+    visited[node] = true;
+        for (int g : graph[node]){
+        if (!visited[g]) dfs(g);
+    }
+}
 
 int solution(int n, vector<vector<int>> computers) {
     int answer = 0;
     
-    for (int i=0; i<n; i++){
-        if (!visited[i]){
-            stack<int> s;
-            s.push(i);
-            visited[i] = true;
-            while(!s.empty()){
-                int cur = s.top();
-                s.pop();
-                for (int next = 0; next < n; next ++){
-                    if (computers[cur][next] == 1 && i!=next && !visited[next] ) {
-                        visited[next] = 1;
-                        s.push(next);
-                    }
-                }
+    for (int i=0; i<computers.size(); i++){
+        for (int j=0; j<computers[i].size(); j++){
+            if (computers[i][j] == 1 && i!=j){
+                graph[i].push_back(j);
+                graph[j].push_back(i);
             }
+        }
+    }
+    
+    for (int i=0; i<n; i++){
+        if (!visited[i]) {
+            dfs(i);
             cnt ++;
         }
-        
     }
+    
     return cnt;
 }
