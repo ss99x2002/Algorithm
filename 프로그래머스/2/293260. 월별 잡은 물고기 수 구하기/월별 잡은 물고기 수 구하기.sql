@@ -1,0 +1,9 @@
+-- 월별 잡은 물고기 수와 월 출력
+-- 잡은 물고기 수 FISH_COUNT
+-- 월 MONTH
+-- 월 기준 오름차순 ASC 
+
+SELECT COUNT(*) as FISH_COUNT, MONTH(TIME) as MONTH
+FROM FISH_INFO
+GROUP BY MONTH(TIME)
+ORDER BY MONTH ASC
