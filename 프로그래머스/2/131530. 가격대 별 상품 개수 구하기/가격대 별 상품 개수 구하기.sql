@@ -1,0 +1,6 @@
+-- 가격대별, product 갯수 group by
+-- 가격대 오름차순 정렬
+SELECT (FLOOR(PRICE DIV 10000) * 10000) as PRICE_GROUP, count(*)
+FROM PRODUCT 
+GROUP BY (FLOOR(PRICE DIV 10000) * 10000)
+ORDER BY PRICE_GROUP ASC
