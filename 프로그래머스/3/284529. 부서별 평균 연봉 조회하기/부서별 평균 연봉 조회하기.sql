@@ -1,0 +1,10 @@
+-- 부서별 평균 연봉 조회
+-- 부서별 부서 ID, 영문 부서명, 평균 연봉 조회
+-- 평균 연봉은 소수점 첫째자리에서! 반올림하고, 컬럼명 AVG_SAL 
+-- 평균연봉 기준 내림차순 정렬
+
+SELECT HE.DEPT_ID AS DEPT_ID, HP.DEPT_NAME_EN AS DEPT_NAME_EN, ROUND(SUM(HE.SAL)/COUNT(HE.EMP_NO)) AS AVG_SAL
+FROM HR_EMPLOYEES as HE JOIN HR_DEPARTMENT as HP
+ON HE.DEPT_ID = HP.DEPT_ID
+GROUP BY HE.DEPT_ID, HP.DEPT_NAME_EN
+ORDER BY AVG_SAL DESC
