@@ -1,0 +1,10 @@
+-- 평균 대여 기간이 7일 이상인 자동차들의
+-- 자동차 ID, 평균 대여기간 (AVERAGE_DURATION)
+-- 평균 소수점 두번째 자리 반올림 round, 
+-- 평균 기준 내림차순 정렬, id 기준 내림차순
+-- 만약에 1월1일, 1월2일 대여했으면 2일 
+SELECT CAR_ID, ROUND(AVG(DATEDIFF(END_DATE,START_DATE) + 1),1) as AVERAGE_DURATION
+FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+GROUP BY CAR_ID
+HAVING AVG(DATEDIFF(END_DATE,START_DATE)+1) >= 7
+ORDER BY AVERAGE_DURATION DESC, CAR_ID DESC
