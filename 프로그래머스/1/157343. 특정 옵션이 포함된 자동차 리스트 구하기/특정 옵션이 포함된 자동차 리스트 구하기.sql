@@ -1,0 +1,6 @@
+-- 네비게이션 옵션 포함된 자동차 리스트 출력
+-- 자동차 id 기준 내림차순
+SELECT CAR_ID, CAR_TYPE, DAILY_FEE, OPTIONS 
+FROM CAR_RENTAL_COMPANY_CAR
+WHERE OPTIONS LIKE '%네비게이션%'
+ORDER BY CAR_ID DESC
