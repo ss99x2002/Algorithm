@@ -63,19 +63,19 @@ int main() {
         int bestEnd = st;
         while(idx < n && flower[idx].first <= st){
             bestEnd = max(bestEnd, flower[idx].second);
-            idx ++;
+            idx ++; //날짜가 3월 1일보다 작다면, 그 중 가장 긴 것을 선택. 
         }
 
         if (bestEnd == st) {
             cout << 0;
-            return 0;
+            return 0; //근데 st가 1130보다 작은데도 갱신되지 않는다면?  -> 더이상 없음.
         }
 
-        st = bestEnd;
+        st = bestEnd; // 꽃 끝난 날짜를 다시 start로 선정.
         cnt ++;
     }
 
     // 정원에 심는 꽃의 수는 가능한 적게 한다.
     cout << cnt;
-    
+
 }
