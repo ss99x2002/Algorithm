@@ -1,0 +1,6 @@
+-- string 내에 특정 문자 들어가는지판단
+-- %LIKE% ? 사용
+SELECT ANIMAL_ID, NAME
+FROM ANIMAL_INS
+WHERE NAME LIKE '%el%' AND ANIMAL_TYPE = 'Dog'
+ORDER BY NAME
