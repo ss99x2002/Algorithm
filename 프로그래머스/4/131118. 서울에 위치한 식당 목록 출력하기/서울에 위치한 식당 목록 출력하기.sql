@@ -1,0 +1,18 @@
+-- 서울에 위치한 식당들의
+-- 식당 id, 식당 이름, 음식 종류, 즐겨찾기 수, 리뷰 평균 점수 조회
+
+-- 소수점 세번째 자리에서 반올림 -> 2째자리까지 나타내기
+-- 평균점수 기준 DESC, 즐겨찾기 기준 DESC
+
+WITH SEOUL as (
+    SELECT REST_ID, REST_NAME, FOOD_TYPE, FAVORITES, ADDRESS 
+    FROM REST_INFO
+    WHERE ADDRESS LIKE '서울%'
+)
+
+
+SELECT s.REST_ID, s.REST_NAME, s.FOOD_TYPE, s.FAVORITES, s.ADDRESS, ROUND(AVG(r.REVIEW_SCORE),2) as SCORE
+FROM SEOUL as s JOIN REST_REVIEW as r
+ON s.REST_ID = r.REST_ID
+GROUP BY s.REST_ID, s.REST_NAME, s.FOOD_TYPE, s.FAVORITES, s.ADDRESS
+ORDER BY SCORE DESC, s.FAVORITES DESC
