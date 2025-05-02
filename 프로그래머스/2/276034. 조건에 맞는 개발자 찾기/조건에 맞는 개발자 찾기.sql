@@ -1,0 +1,17 @@
+-- C# 이나 Python 스킬 가진 개발자 정보 조회
+-- 개발자 id, 이메일, 이름, 성 조회 SQL
+-- id 기준 ASC
+
+-- ⭐️ WITH 연달아 2개 사용할 수 없음.
+
+WITH SKILLS as (
+    SELECT CODE, NAME
+    FROM SKILLCODES
+    WHERE NAME IN ('Python', 'C#')
+) 
+
+SELECT ID, EMAIL, FIRST_NAME, LAST_NAME
+FROM DEVELOPERS
+WHERE SKILL_CODE & (SELECT CODE FROM SKILLS WHERE NAME = 'Python') > 0 OR
+SKILL_CODE & (SELECT CODE FROM SKILLS WHERE NAME = 'C#') > 0
+ORDER BY ID ASC
