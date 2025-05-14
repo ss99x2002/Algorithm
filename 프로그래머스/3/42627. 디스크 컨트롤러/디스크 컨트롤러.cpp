@@ -30,14 +30,17 @@ int solution(vector<vector<int>> jobs) {
     int curTime = 0;
     
     priority_queue<pair<int,int>, vector<pair<int,int>>, cmp> pq;
-    // pq의 비교함수 주는 방법 다시 보기!
+    // pq의 비교함수를 줘서, 넣기만해도 작업간 우선순위를 결정할 수 있도록 한다.
+    // pq의 비교함수는 struct로 구현된다. 
     
     sort(jobs.begin(), jobs.end(), jobsComp);
+    // job 자체가 (2,6) (0,3) (1,9) 처럼 시작 순서가 뒤죽박죽 오는 케이스가 있기 때문에 sort 필요.
 
     while(idx < jobs.size() || !pq.empty()){
         // 대기열 비어있으면, 다음 도착 시간으로 점프
         if (pq.empty()){
            curTime = max(curTime, jobs[idx][0]); 
+           // 도착시간으로 바로 점프해서 -> 해당 도착시간 전 작업들을 살필 수 있도록 한다. 
         }
         
         // 지금 시각까지 도착한 작업 모두 대기열에 추가
