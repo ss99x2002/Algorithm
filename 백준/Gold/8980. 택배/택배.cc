@@ -21,17 +21,17 @@ using namespace std;
 
 int n,c,m; //n=마을수, c=트럭용량, m=박스정보수
 
-vector<pair<int,int>> boxs[20001];
 
-bool comp(pair<int,int> a, pair<int,int> b){
-   if (a.first != b.first){
-       return a.first < b.first;
-   }
-   return a.second > b.second;
+bool comp(pair<pair<int,int>,int> a, pair<pair<int,int>,int>b){
+    if (a.first.second == b.first.second)
+        return a.first.first < b.first.first;
+    else
+        return a.first.second < b.first.second;
 }
 
 int start,arrived,cnt;
 
+vector<pair<pair<int,int>,int>> boxs;
 int main() {
     cin >> n >> c;
     cin >> m;
@@ -39,32 +39,30 @@ int main() {
 
     for (int i=0; i<m; i++){
         cin >> start >> arrived >> cnt;
-        boxs[start].push_back({arrived,cnt});
+        boxs.push_back({{start,arrived},cnt});
     }
+    sort(boxs.begin(), boxs.end(), comp);
 
-    for (int i=1; i<n+1; i++){
-        sort(boxs[i].begin(), boxs[i].end(), comp);
-    }
 
-    int curW = 0; //현재 적재된 박스 수
-    int res = c;
-    int load[20001] = {0};
-    for (int i=1; i<=n; i++){
-        if (load[i] != 0) curW = curW - load[i]; // j마을 도착했는데, j마을에 줘야하는게 있다.
-        for (int j=0; j<boxs[i].size(); j++){
-           res = c-curW; //현재 적재 가능한 남은 박스 수
-            if (res >= boxs[i][j].second) {
-                curW = curW + boxs[i][j].second;
-                load[boxs[i][j].first] = boxs[i][j].second + load[boxs[i][j].first]; //j마을로 가는 박스 수
-            } else {
-                    curW = curW + res; // 만약 남은 수 보다 second가 더 많으면, 남은거 만큼만 담도록
-                    load[boxs[i][j].first] = res +  load[boxs[i][j].first]; // 남은거 만큼 j마을로 감.
-            }
+    int load[2001] = {0};
+
+    // (1-2,30) (3-4,40) (2-5,70) (1-6,40) (5-6,60)
+    for (int i=0; i<boxs.size(); i++ ){
+        int starts = boxs[i].first.first;
+        int arv = boxs[i].first.second;
+        int boxCnt = boxs[i].second;
+        int maxTruck = 0;
+        for (int j=starts; j<arv; j++){
+            maxTruck = max(load[j],maxTruck);
+            // 현재 실어야 할 택배가 가야하는 경로에서, 가장 많이 적재된 박스의 양을 확인
+            // 이를 통해서 c-maxTruck으로 실을 수 있는 양을 파악하기 위함이다.
         }
-    }
-
-    for (int i=1; i<=n; i++){
-        answer = answer + load[i];
+        int capacity = min (boxCnt, c-maxTruck);
+        for (int j=starts; j<arv; j++){
+            // 도착지에는 더이상 더하지 않아서, 이를 실제로 박스가 내린 로직이라고 판단.
+            load[j] = load[j] + capacity;
+        }
+        answer = answer + capacity;
     }
     cout << answer;
 }
