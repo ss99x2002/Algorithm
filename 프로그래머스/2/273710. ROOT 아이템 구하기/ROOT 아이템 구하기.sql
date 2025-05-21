@@ -1,0 +1,8 @@
+-- ROOT아이템을 찾아 id, name 출력
+-- id 기준 ASC
+
+SELECT ifo.ITEM_ID as ITEM_ID, ifo.ITEM_NAME as ITEM_NAME
+FROM ITEM_TREE AS it JOIN ITEM_INFO as ifo
+ON it.ITEM_ID = ifo.ITEM_ID
+WHERE it.PARENT_ITEM_ID is null
+ORDER BY ifo.ITEM_ID ASC
