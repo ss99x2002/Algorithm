@@ -1,26 +1,44 @@
--- 코드를 입력하세요
--- 자동차 종류가 세단 또는 SUV인 자동차중
--- 2022년 11월 1일부터 2022년 11월 30일까지 대여 가능하고
--- 30일간 대여 금액이 50만원 이상, 200만원 미만인 자동차에 대해
--- 자동차 id, 자동차 종류, 대여금액 (fee) 리스트 출력하는 sql문
--- 대여금액을 기준으로 내림차순 정렬, 대여금액 같은 경우 자동차 종류 기준 오름차순 정렬
--- 자동차 종류까지 같으면 자동차 id기준 내림차준 정렬
-SELECT c.car_id, c.car_type, FLOOR((c.daily_fee * 30) * (1-d.discount_rate/100)) as fee
-FROM
- car_rental_company_car as c
- join car_rental_company_discount_plan as d 
- on c.car_type = d.car_type
-WHERE
-    c.car_type IN ('세단', 'SUV')
-    AND d.duration_type = '30일 이상'
-    AND c.car_id NOT IN (
-    SELECT car_id
-    FROM car_rental_company_rental_history
-    WHERE NOT (end_date < '2022-11-01' OR start_date > '2022-11-30')
-    )
-    AND FLOOR((c.daily_fee * 30) * (1-d.discount_rate/100)) BETWEEN 500000 AND 1999999
-ORDER BY
-    fee DESC,
-    car_type ASC,
-    car_id DESC;
+-- 자동차 종류 '세단' or 'SUV'인 자동차중
+-- 2022-11-1~2022-11-30까지 대여 가능하고, 
+-- 30일간 대여 금액이 50만원 이상 ~ 200만원 미만 자동차
 
+-- 자동차 id, 종류, 대여금액 (fee) 출력 
+-- 대여금액 desc, 자동차 종류 asc, 자동차 id desc
+
+WITH avail_car AS (
+  SELECT
+    c.car_id,
+    c.car_type,
+    c.daily_fee
+  FROM CAR_RENTAL_COMPANY_CAR AS c
+  WHERE c.car_type IN ('세단','SUV')
+    -- 이 기간과 겹치는 이력이 하나도 없는 차만
+    AND NOT EXISTS (
+      SELECT 1
+      FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY AS h
+      WHERE h.car_id = c.car_id
+        -- 겹친다는 것은 시작일이 11/30 이전이면서 종료일이 11/1 이후인 경우
+        AND h.start_date <= '2022-11-30'
+        AND h.end_date   >= '2022-11-01'
+    )
+)
+
+ SELECT distinct(ac.car_id) as car_id,
+ ac.car_type as car_type,
+ TRUNCATE((ac.daily_fee * 30) * (1- (cp.discount_rate *1.0 / 100)),0) as fee
+ FROM avail_car as ac JOIN CAR_RENTAL_COMPANY_DISCOUNT_PLAN as cp
+ ON ac.car_type = cp.car_type
+ WHERE cp.duration_type = '30일 이상' AND 
+ ((ac.daily_fee * 30) * (1- (cp.discount_rate *1.0 / 100))) >= 500000  AND  
+ ((ac.daily_fee * 30) * (1- (cp.discount_rate *1.0 / 100))) < 2000000
+ ORDER BY fee desc, car_type asc, car_id desc
+ 
+ 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
