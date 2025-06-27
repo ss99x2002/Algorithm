@@ -1,31 +1,41 @@
 #include <iostream>
 #include <algorithm>
+
 using namespace std;
 
-//합이 S이상 되는 것 중에서 가장 짧은 것의 길이 구하는 프로그램 작성. 
-// 최소 길이 출력, 만약 합을 만들 수가 없다면 0 출력 
+// 이 수열에서 연속된 수들의 부분합 중에
+// 합이 s가 되는 것 중 가장 짦은 것의 길이는?
 
-int N,S;
-int A[100001];
-int minV = 0x7fffffff;
-int total;
+long long n, s, num;
+long long sum = 0;
+int minLen = 100001;
+vector<int> a;
 
-int main(){
-    cin >> N >> S;
-    for (int i=0; i<N; i++){
-        cin >> A[i];
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    cin >> n >> s;
+
+    for (int i = 0; i < n; i++) {
+        cin >> num;
+        a.push_back(num);
     }
-    total = A[0];
-    int en = 0;
-    for (int st=0; st<N; st++){
-        while(en<N && total < S) {
-            en++;
-            if (en!=N) total = total + A[en];
+
+    int left = 0;
+    for (int i = 0; i < n; i++) {
+        sum = sum + a[i];
+        while (sum >= s) {
+            minLen = min(minLen, i - left + 1);
+            sum = sum - a[left++];
         }
-        if (en==N) break;
-        minV = min (minV,en-st+1);
-        total = total - A[st];
     }
-    if (minV == 0x7fffffff) minV =0; 
-    cout << minV;
+
+    if(minLen == 100001){
+        cout << 0;
+        return 0;
+    }
+    else {
+        cout << minLen << "\n";
+    }
 }
