@@ -1,6 +1,9 @@
--- 경제 카테고리에 속하는 도서 id, 저자명, 출판일 리스트 출력
--- 출판일 기준 오름차순 정렬
-SELECT b.book_id, a.author_name,  CAST(DATE(b.published_date) AS CHAR)  as published_date
-FROM book as b join author as a on b.author_id = a.author_id
+-- 경제에 속하는 도서들의 id, 저자병, 출판일 출력
+-- 출판일 오름차순 
+
+SELECT b.book_id as book_id, a.author_name as AUTHOR_NAME,
+DATE_FORMAT(b.published_date, '%Y-%m-%d') as PUBLISHED_DATE
+FROM BOOK as b JOIN  AUTHOR as a
+ON b.author_id = a.author_id
 WHERE b.category = '경제'
-ORDER BY published_date ASC;
+ORDER BY b.published_date asc 
